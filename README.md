@@ -85,17 +85,16 @@
 - [Условия использования](https://s1ivker.github.io/scity/terms.html)
 - [Политика конфиденциальности](https://s1ivker.github.io/scity/privacy.html)
 
----
-
 ## Структура репозитория
-scity/
-├── index.html # главная страница сайта
-├── terms.html # условия использования
-├── privacy.html # политика конфиденциальности
-├── avatar.mp4 # видео-аватар для главной
-└── README.md # этот файл
 
----
+```
+scity/
+├── index.html      # главная страница сайта
+├── terms.html      # условия использования
+├── privacy.html    # политика конфиденциальности
+├── avatar.mp4      # видео-аватар для главной
+└── README.md       # этот файл
+```
 
 <div align="center">
 
