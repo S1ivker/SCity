@@ -54,6 +54,8 @@
 
 ## Ссылки
 
+| | |
+|---|---|
 | 🌐 **Сайт** | [s1ivker.github.io/scity](https://s1ivker.github.io/scity/) |
 | 💬 **Сервер поддержки** | [Присоединиться](https://discord.gg/scity) |
 | 🛠 **Канал разработчиков** | [#bot-support](https://discord.com/channels/1190795557258674256/1570557125091139664) |
