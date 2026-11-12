@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCity — Discord Bot</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0a0a12; color: #e6e6f0; min-height: 100vh;
+    line-height: 1.7; position: relative; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: -50%;
+    background: conic-gradient(from 0deg, #6a00ff, #00d4ff, #ff00c8, #6a00ff);
+    animation: spin 24s linear infinite; opacity: 0.12; z-index: -2;
+    transition: transform 0.3s ease-out;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(106,0,255,0.18), transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0,212,255,0.12), transparent 50%), #0a0a12;
+    z-index: -1; pointer-events: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+  .logo {
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #00d4ff;
+    border: 1px solid rgba(0,212,255,0.3); padding: 6px 14px; border-radius: 20px;
+    backdrop-filter: blur(6px);
+  }
+  .lang { display: flex; gap: 6px; }
+  .lang button {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: #c8c8d8; padding: 6px 14px; border-radius: 8px; cursor: pointer;
+    font-size: 13px; font-weight: 600; transition: 0.2s;
+  }
+  .lang button:hover { background: rgba(255,255,255,0.12); }
+  .lang button.active { background: linear-gradient(90deg, #6a00ff, #00d4ff); color: #fff; border-color: transparent; }
+
+  .hero { text-align: center; margin-bottom: 90px; }
+  .avatar {
+    width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
+    border: 3px solid rgba(0,212,255,0.4);
+    box-shadow: 0 0 60px rgba(106,0,255,0.5), 0 0 100px rgba(0,212,255,0.3);
+    margin-bottom: 28px; background: #0a0a12;
+  }
+  h1 {
+    font-size: clamp(36px, 7vw, 64px); font-weight: 800;
+    background: linear-gradient(90deg, #ffffff, #00d4ff, #ff00c8, #ffffff);
+    background-size: 300% 100%; -webkit-background-clip: text; background-clip: text;
+    color: transparent; animation: shimmer 8s ease infinite; margin-bottom: 16px;
+  }
+  @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .tagline { font-size: clamp(16px, 2.5vw, 20px); color: #b8b8cc; max-width: 620px; margin: 0 auto 36px; }
+  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 14px 28px; border-radius: 12px; font-weight: 700;
+    font-size: 15px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: linear-gradient(90deg, #6a00ff, #00d4ff); color: #fff;
+    box-shadow: 0 8px 30px rgba(106,0,255,0.4);
+  }
+  .btn-primary:hover { box-shadow: 0 12px 40px rgba(106,0,255,0.6); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.06); color: #e6e6f0; border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
+
+  section { margin-bottom: 90px; }
+  .section-title { font-size: clamp(24px, 4vw, 34px); margin-bottom: 30px; color: #fff; }
+  .section-title span { color: #00d4ff; }
+
+  .card {
+    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 32px; backdrop-filter: blur(14px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .about p { color: #c8c8d8; margin-bottom: 14px; }
+  .about p:last-child { margin-bottom: 0; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .feature {
+    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 22px; backdrop-filter: blur(10px);
+  }
+  .feature h3 { font-size: 16px; color: #fff; margin-bottom: 6px; }
+  .feature p { font-size: 14px; color: #a8a8bc; margin: 0; }
+
+  .commands { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .cmd {
+    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 16px 18px; backdrop-filter: blur(10px);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .cmd code {
+    color: #00d4ff; font-size: 14px; font-weight: 700; font-family: 'Consolas', monospace;
+  }
+  .cmd p { font-size: 13px; color: #a8a8bc; margin: 0; }
+
+  .legal-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+  .contacts { display: flex; flex-direction: column; gap: 12px; }
+  .contact-row {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; backdrop-filter: blur(10px);
+  }
+  .contact-row .label { color: #8a8aa0; font-size: 13px; min-width: 140px; }
+  .contact-row a { color: #00d4ff; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .contact-row a:hover { text-decoration: underline; }
+
+  .footer { margin-top: 60px; text-align: center; color: #6a6a80; font-size: 13px; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  [data-lang] { display: none; }
+  [data-lang].show { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="logo">SCity</span>
+    <div class="lang">
+      <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+      <button id="btn-ru" onclick="setLang('ru')">RU</button>
+    </div>
+  </div>
+
+  <!-- ==================== ENGLISH ==================== -->
+  <div data-lang="en" class="show">
+
+    <div class="hero reveal">
+      <video class="avatar" src="avatar.mp4" autoplay loop muted playsinline></video>
+      <h1>SCity</h1>
+      <p class="tagline">A comfortable Discord bot with moderation, server status, tickets, and a bunch of useful little things.</p>
+      <div class="cta">
+        <a href="https://discord.com/oauth2/authorize?client_id=1298592282634752040&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener" class="btn btn-primary">Add to Discord</a>
+        <a href="https://discord.gg/scity" target="_blank" rel="noopener" class="btn btn-ghost">Support Server</a>
+      </div>
+    </div>
+
+    <section class="about reveal">
+      <h2 class="section-title">About <span>SCity</span></h2>
+      <div class="card">
+        <p>SCity is a Discord bot built to make servers comfortable and well-organized. We handle the routine — moderation, logs, welcome messages, role buttons, tickets, and server status — so you can focus on your community.</p>
+        <p>Our team cares about stability, clean design, and honest work. No intrusive ads, no selling your data, no shady mechanics. Just a bot that does its job well.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">What <span>we offer</span></h2>
+      <div class="features">
+        <div class="feature"><h3>Moderation</h3><p>Logs, welcome and farewell messages, role buttons — all configurable per server.</p></div>
+        <div class="feature"><h3>Server Status</h3><p>Live status channels showing member count, online users, and more.</p></div>
+        <div class="feature"><h3>Voice &amp; Soundboard</h3><p>Join voice channels, play sounds, and manage your audio experience.</p></div>
+        <div class="feature"><h3>Utilities</h3><p>Help panel, welcome DMs, channel broadcasts, and other handy tools.</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Commands</h2>
+      <div class="commands">
+        <div class="cmd"><code>/help</code><p>Bot control panel</p></div>
+        <div class="cmd"><code>/join</code><p>Join your voice channel and stay silent</p></div>
+        <div class="cmd"><code>/leave</code><p>Leave the voice channel</p></div>
+        <div class="cmd"><code>/leave_channel</code><p>Configure farewell messages in a channel</p></div>
+        <div class="cmd"><code>/logs</code><p>Configure server logs</p></div>
+        <div class="cmd"><code>/role_buttons</code><p>Set up role buttons with emojis</p></div>
+        <div class="cmd"><code>/server_status</code><p>Create or remove server status channels</p></div>
+        <div class="cmd"><code>/soundboard</code><p>Open the soundboard and play sounds in voice</p></div>
+        <div class="cmd"><code>/spam</code><p>Broadcast a message to selected channels multiple times</p></div>
+        <div class="cmd"><code>/welcome_channel</code><p>Configure welcome messages in a channel</p></div>
+        <div class="cmd"><code>/welcome_dm</code><p>Configure welcome DMs for new members</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Legal</h2>
+      <div class="legal-buttons">
+        <a href="https://s1ivker.github.io/scity/terms.html" target="_blank" rel="noopener" class="btn btn-ghost">Terms of Service</a>
+        <a href="https://s1ivker.github.io/scity/privacy.html" target="_blank" rel="noopener" class="btn btn-ghost">Privacy Policy</a>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Contact</h2>
+      <div class="contacts">
+        <div class="contact-row"><span class="label">Support Server</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">discord.gg/scity</a></div>
+        <div class="contact-row"><span class="label">Developer Channel</span><a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener">#bot-support</a></div>
+        <div class="contact-row"><span class="label">Developer DM</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Direct Message</a></div>
+        <div class="contact-row"><span class="label">Email</span><a href="mailto:s1ivker090@gmail.com">s1ivker090@gmail.com</a></div>
+        <div class="contact-row"><span class="label">Backup Server</span><a href="https://discord.gg/6jNGZJ4Nk6" target="_blank" rel="noopener">Join backup server</a></div>
+      </div>
+    </section>
+
+    <div class="footer">© 2026 SCity. All rights reserved.</div>
+  </div>
+
+  <!-- ==================== RUSSIAN ==================== -->
+  <div data-lang="ru">
+
+    <div class="hero reveal">
+      <video class="avatar" src="avatar.mp4" autoplay loop muted playsinline></video>
+      <h1>SCity</h1>
+      <p class="tagline">Комфортный Discord-бот с модерацией, статусом сервера, тикетами и кучей полезных мелочей.</p>
+      <div class="cta">
+        <a href="https://discord.com/oauth2/authorize?client_id=1298592282634752040&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener" class="btn btn-primary">Добавить в Discord</a>
+        <a href="https://discord.gg/scity" target="_blank" rel="noopener" class="btn btn-ghost">Сервер поддержки</a>
+      </div>
+    </div>
+
+    <section class="about reveal">
+      <h2 class="section-title">О <span>SCity</span></h2>
+      <div class="card">
+        <p>SCity — это Discord-бот, созданный для того, чтобы сделать серверы комфортными и организованными. Мы берём на себя рутину — модерацию, логи, приветствия, кнопки ролей, тикеты и статус сервера — чтобы вы могли заниматься сообществом.</p>
+        <p>Наша команда ценит стабильность, чистый дизайн и честную работу. Никакой навязчивой рекламы, продажи данных и сомнительных механик. Просто бот, который хорошо делает своё дело.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Что <span>мы предлагаем</span></h2>
+      <div class="features">
+        <div class="feature"><h3>Модерация</h3><p>Логи, приветствия и прощания, кнопки ролей — всё настраивается под каждый сервер.</p></div>
+        <div class="feature"><h3>Статус сервера</h3><p>Живые статус-каналы с количеством участников, онлайном и другим.</p></div>
+        <div class="feature"><h3>Голос и саундборд</h3><p>Заход в голосовые каналы, воспроизведение звуков и управление аудио.</p></div>
+        <div class="feature"><h3>Утилиты</h3><p>Панель помощи, приветственные ЛС, рассылки по каналам и другие инструменты.</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Команды</h2>
+      <div class="commands">
+        <div class="cmd"><code>/help</code><p>Панель управления ботом</p></div>
+        <div class="cmd"><code>/join</code><p>Зайти в твой голосовой канал и молчать</p></div>
+        <div class="cmd"><code>/leave</code><p>Выйти из голосового канала</p></div>
+        <div class="cmd"><code>/leave_channel</code><p>Настроить прощание в канале</p></div>
+        <div class="cmd"><code>/logs</code><p>Настроить логи сервера</p></div>
+        <div class="cmd"><code>/role_buttons</code><p>Настроить роли по кнопкам с эмодзи</p></div>
+        <div class="cmd"><code>/server_status</code><p>Создать или удалить статус-каналы сервера</p></div>
+        <div class="cmd"><code>/soundboard</code><p>Открыть саундборд и запустить звук в войсе</p></div>
+        <div class="cmd"><code>/spam</code><p>Разослать сообщение по указанным каналам несколько раз</p></div>
+        <div class="cmd"><code>/welcome_channel</code><p>Настроить приветствие в канале</p></div>
+        <div class="cmd"><code>/welcome_dm</code><p>Настроить приветствие участнику в личные сообщения</p></div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Документы</h2>
+      <div class="legal-buttons">
+        <a href="https://s1ivker.github.io/scity/terms.html" target="_blank" rel="noopener" class="btn btn-ghost">Условия использования</a>
+        <a href="https://s1ivker.github.io/scity/privacy.html" target="_blank" rel="noopener" class="btn btn-ghost">Политика конфиденциальности</a>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Контакты</h2>
+      <div class="contacts">
+        <div class="contact-row"><span class="label">Сервер поддержки</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">discord.gg/scity</a></div>
+        <div class="contact-row"><span class="label">Канал разработчиков</span><a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener">#bot-support</a></div>
+        <div class="contact-row"><span class="label">ЛС разработчика</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Личные сообщения</a></div>
+        <div class="contact-row"><span class="label">Email</span><a href="mailto:s1ivker090@gmail.com">s1ivker090@gmail.com</a></div>
+        <div class="contact-row"><span class="label">Резервный сервер</span><a href="https://discord.gg/6jNGZJ4Nk6" target="_blank" rel="noopener">Перейти на резервный сервер</a></div>
+      </div>
+    </section>
+
+    <div class="footer">© 2026 SCity. Все права защищены.</div>
+  </div>
+</div>
+
+<script>
+function setLang(l) {
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.classList.toggle('show', el.getAttribute('data-lang') === l);
+  });
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.getElementById('btn-ru').classList.toggle('active', l === 'ru');
+  try { localStorage.setItem('scity-lang', l); } catch(e) {}
+  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => checkReveal(el)), 50);
+}
+(function() {
+  let saved = null;
+  try { saved = localStorage.getItem('scity-lang'); } catch(e) {}
+  if (saved === 'ru' || saved === 'en') setLang(saved);
+})();
+
+// mouse-follow gradient
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 40;
+  const y = (e.clientY / window.innerHeight - 0.5) * 40;
+  const before = document.body;
+  before.style.setProperty('--mx', x + 'px');
+  before.style.setProperty('--my', y + 'px');
+  const bg = document.querySelector('body::before');
+});
+// apply via CSS variable on pseudo is not possible directly, so animate a wrapper
+const style = document.createElement('style');
+style.textContent = `
+  body::before {
+    transform: translate(var(--mx, 0), var(--my, 0));
+  }
+`;
+document.head.appendChild(style);
+
+// scroll reveal
+function checkReveal(el) {
+  const rect = el.getBoundingClientRect();
+  const visible = rect.top < window.innerHeight - 80;
+  if (visible) el.classList.add('visible');
+}
+function initReveal() {
+  document.querySelectorAll('.reveal').forEach(el => checkReveal(el));
+}
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.reveal').forEach(el => checkReveal(el));
+});
+window.addEventListener('load', initReveal);
+</script>
+</body>
+</html>
