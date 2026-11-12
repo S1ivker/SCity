@@ -9,124 +9,176 @@
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: #0a0a12; color: #e6e6f0; min-height: 100vh;
+    background: #08080f; color: #e6e6f0; min-height: 100vh;
     line-height: 1.7; position: relative; overflow-x: hidden;
   }
-  body::before {
-    content: ''; position: fixed; inset: -50%;
-    background: conic-gradient(from 0deg, #6a00ff, #00d4ff, #ff00c8, #6a00ff);
-    animation: spin 24s linear infinite; opacity: 0.12; z-index: -2;
-    transition: transform 0.3s ease-out;
-  }
-  body::after {
-    content: ''; position: fixed; inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(106,0,255,0.18), transparent 60%),
-                radial-gradient(circle at 80% 80%, rgba(0,212,255,0.12), transparent 50%), #0a0a12;
-    z-index: -1; pointer-events: none;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+  /* ===== ФОН: цветные волны, реагируют на мышь ===== */
+  .bg {
+    position: fixed; inset: 0; z-index: -3;
+    overflow: hidden; pointer-events: none;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: 0.55;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+    will-change: transform;
+  }
+  .blob1 { width: 620px; height: 620px; background: #6a00ff; top: -180px; left: -120px; }
+  .blob2 { width: 540px; height: 540px; background: #00d4ff; top: 20%; right: -160px; }
+  .blob3 { width: 480px; height: 480px; background: #ff00c8; bottom: -140px; left: 20%; }
+  .blob4 { width: 420px; height: 420px; background: #00ffa3; bottom: 10%; right: 10%; opacity: 0.35; }
+  .grain {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background: radial-gradient(circle at 50% 0%, rgba(10,10,20,0.2), rgba(8,8,15,0.85) 70%);
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 100px; position: relative; z-index: 1; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 70px; }
   .logo {
     font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #00d4ff;
-    border: 1px solid rgba(0,212,255,0.3); padding: 6px 14px; border-radius: 20px;
-    backdrop-filter: blur(6px);
+    border: 1px solid rgba(0,212,255,0.35); padding: 7px 16px; border-radius: 20px;
+    backdrop-filter: blur(8px); background: rgba(0,212,255,0.05);
   }
   .lang { display: flex; gap: 6px; }
   .lang button {
     background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-    color: #c8c8d8; padding: 6px 14px; border-radius: 8px; cursor: pointer;
+    color: #c8c8d8; padding: 7px 16px; border-radius: 10px; cursor: pointer;
     font-size: 13px; font-weight: 600; transition: 0.2s;
   }
-  .lang button:hover { background: rgba(255,255,255,0.12); }
+  .lang button:hover { background: rgba(255,255,255,0.14); }
   .lang button.active { background: linear-gradient(90deg, #6a00ff, #00d4ff); color: #fff; border-color: transparent; }
 
-  .hero { text-align: center; margin-bottom: 90px; }
+  /* ===== HERO ===== */
+  .hero { text-align: center; margin-bottom: 100px; }
   .avatar {
-    width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-    border: 3px solid rgba(0,212,255,0.4);
-    box-shadow: 0 0 60px rgba(106,0,255,0.5), 0 0 100px rgba(0,212,255,0.3);
-    margin-bottom: 28px; background: #0a0a12;
+    width: 168px; height: 168px; border-radius: 50%; object-fit: cover;
+    border: 3px solid rgba(0,212,255,0.5);
+    box-shadow: 0 0 70px rgba(106,0,255,0.55), 0 0 120px rgba(0,212,255,0.35);
+    margin-bottom: 30px; background: #08080f; display: block; margin-left: auto; margin-right: auto;
   }
   h1 {
-    font-size: clamp(36px, 7vw, 64px); font-weight: 800;
+    font-size: clamp(38px, 7vw, 68px); font-weight: 800; letter-spacing: -1px;
     background: linear-gradient(90deg, #ffffff, #00d4ff, #ff00c8, #ffffff);
     background-size: 300% 100%; -webkit-background-clip: text; background-clip: text;
-    color: transparent; animation: shimmer 8s ease infinite; margin-bottom: 16px;
+    color: transparent; animation: shimmer 8s ease infinite; margin-bottom: 18px;
   }
   @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-  .tagline { font-size: clamp(16px, 2.5vw, 20px); color: #b8b8cc; max-width: 620px; margin: 0 auto 36px; }
+  .tagline { font-size: clamp(16px, 2.5vw, 21px); color: #b8b8cc; max-width: 680px; margin: 0 auto 40px; }
   .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .btn {
-    display: inline-block; padding: 14px 28px; border-radius: 12px; font-weight: 700;
+    display: inline-block; padding: 15px 30px; border-radius: 14px; font-weight: 700;
     font-size: 15px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer; border: none;
   }
-  .btn:hover { transform: translateY(-2px); }
+  .btn:hover { transform: translateY(-3px); }
   .btn-primary {
     background: linear-gradient(90deg, #6a00ff, #00d4ff); color: #fff;
-    box-shadow: 0 8px 30px rgba(106,0,255,0.4);
+    box-shadow: 0 10px 40px rgba(106,0,255,0.45);
   }
-  .btn-primary:hover { box-shadow: 0 12px 40px rgba(106,0,255,0.6); }
+  .btn-primary:hover { box-shadow: 0 14px 50px rgba(106,0,255,0.65); }
   .btn-ghost {
     background: rgba(255,255,255,0.06); color: #e6e6f0; border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
   }
-  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.14); }
 
-  section { margin-bottom: 90px; }
-  .section-title { font-size: clamp(24px, 4vw, 34px); margin-bottom: 30px; color: #fff; }
+  /* ===== СЕКЦИИ ===== */
+  section { margin-bottom: 100px; }
+  .section-title { font-size: clamp(26px, 4vw, 36px); margin-bottom: 32px; color: #fff; }
   .section-title span { color: #00d4ff; }
 
   .card {
-    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px; padding: 32px; backdrop-filter: blur(14px);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    background: rgba(18,18,30,0.6); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 34px; backdrop-filter: blur(18px);
+    box-shadow: 0 12px 50px rgba(0,0,0,0.45);
   }
-  .about p { color: #c8c8d8; margin-bottom: 14px; }
+  .about p { color: #c8c8d8; margin-bottom: 14px; font-size: 15.5px; }
   .about p:last-child { margin-bottom: 0; }
 
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  /* ===== ОСОБЕННОСТИ ===== */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
   .feature {
-    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 22px; backdrop-filter: blur(10px);
+    background: rgba(18,18,30,0.6); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 24px; backdrop-filter: blur(14px);
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
   }
-  .feature h3 { font-size: 16px; color: #fff; margin-bottom: 6px; }
+  .feature:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,212,255,0.35);
+    box-shadow: 0 10px 40px rgba(0,212,255,0.15);
+  }
+  .feature .icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; margin-bottom: 14px;
+    background: linear-gradient(135deg, rgba(106,0,255,0.3), rgba(0,212,255,0.3));
+    border: 1px solid rgba(0,212,255,0.25);
+  }
+  .feature h3 { font-size: 16.5px; color: #fff; margin-bottom: 8px; }
   .feature p { font-size: 14px; color: #a8a8bc; margin: 0; }
 
-  .commands { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  /* ===== КОМАНДЫ ===== */
+  .commands { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
   .cmd {
-    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px; padding: 16px 18px; backdrop-filter: blur(10px);
+    background: rgba(18,18,30,0.6); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 16px 20px; backdrop-filter: blur(12px);
     display: flex; flex-direction: column; gap: 4px;
+    transition: border-color 0.2s, transform 0.2s;
   }
+  .cmd:hover { border-color: rgba(106,0,255,0.4); transform: translateX(3px); }
   .cmd code {
     color: #00d4ff; font-size: 14px; font-weight: 700; font-family: 'Consolas', monospace;
   }
-  .cmd p { font-size: 13px; color: #a8a8bc; margin: 0; }
+  .cmd p { font-size: 13.5px; color: #a8a8bc; margin: 0; }
 
+  /* ===== ДОКУМЕНТЫ ===== */
   .legal-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
-  .contacts { display: flex; flex-direction: column; gap: 12px; }
+  /* ===== КОНТАКТЫ ===== */
+  .contacts { display: flex; flex-direction: column; gap: 10px; }
   .contact-row {
-    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
-    background: rgba(20,20,32,0.55); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px; backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 22px; background: rgba(18,18,30,0.6);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+    backdrop-filter: blur(14px); transition: border-color 0.2s, transform 0.2s;
+    flex-wrap: wrap;
   }
-  .contact-row .label { color: #8a8aa0; font-size: 13px; min-width: 140px; }
-  .contact-row a { color: #00d4ff; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .contact-row:hover { border-color: rgba(0,212,255,0.35); transform: translateX(3px); }
+  .contact-row .label {
+    color: #8a8aa0; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px;
+    font-weight: 600;
+  }
+  .contact-row a {
+    color: #00d4ff; text-decoration: none; font-weight: 600; font-size: 15px;
+  }
   .contact-row a:hover { text-decoration: underline; }
 
-  .footer { margin-top: 60px; text-align: center; color: #6a6a80; font-size: 13px; }
+  .footer { margin-top: 70px; text-align: center; color: #6a6a80; font-size: 13px; }
 
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.85s ease, transform 0.85s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   [data-lang] { display: none; }
   [data-lang].show { display: block; }
+
+  @media (max-width: 600px) {
+    .contact-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .card { padding: 24px; }
+  }
 </style>
 </head>
 <body>
+
+<div class="bg">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="blob blob4"></div>
+</div>
+<div class="grain"></div>
+
 <div class="wrap">
   <div class="topbar">
     <span class="logo">SCity</span>
@@ -142,28 +194,37 @@
     <div class="hero reveal">
       <video class="avatar" src="avatar.mp4" autoplay loop muted playsinline></video>
       <h1>SCity</h1>
-      <p class="tagline">A comfortable Discord bot with moderation, server status, tickets, and a bunch of useful little things.</p>
+      <p class="tagline">A comfortable Discord bot with moderation, tickets, logging, leveling, and a ton of useful features for communities of any size.</p>
       <div class="cta">
         <a href="https://discord.com/oauth2/authorize?client_id=1298592282634752040&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener" class="btn btn-primary">Add to Discord</a>
-        <a href="https://discord.gg/scity" target="_blank" rel="noopener" class="btn btn-ghost">Support Server</a>
+        <a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener" class="btn btn-ghost">Support Server</a>
       </div>
     </div>
 
     <section class="about reveal">
       <h2 class="section-title">About <span>SCity</span></h2>
       <div class="card">
-        <p>SCity is a Discord bot built to make servers comfortable and well-organized. We handle the routine — moderation, logs, welcome messages, role buttons, tickets, and server status — so you can focus on your community.</p>
-        <p>Our team cares about stability, clean design, and honest work. No intrusive ads, no selling your data, no shady mechanics. Just a bot that does its job well.</p>
+        <p>SCity is a Discord bot built to make servers comfortable, well-organized, and pleasant to be in. We handle the routine — moderation, logging, welcome and farewell messages, role buttons, tickets, leveling, and server status — so you can focus on your community.</p>
+        <p>Our team values stability, clean design, and honest work. No intrusive ads, no selling your data, no shady mechanics. Just a bot that does its job well and respects both server owners and members.</p>
+        <p>The bot is designed to work on any server — gaming clans, community hubs, cozy friend groups. Every feature is fully configurable, so each server can be set up the way its owner wants.</p>
       </div>
     </section>
 
     <section class="reveal">
       <h2 class="section-title">What <span>we offer</span></h2>
       <div class="features">
-        <div class="feature"><h3>Moderation</h3><p>Logs, welcome and farewell messages, role buttons — all configurable per server.</p></div>
-        <div class="feature"><h3>Server Status</h3><p>Live status channels showing member count, online users, and more.</p></div>
-        <div class="feature"><h3>Voice &amp; Soundboard</h3><p>Join voice channels, play sounds, and manage your audio experience.</p></div>
-        <div class="feature"><h3>Utilities</h3><p>Help panel, welcome DMs, channel broadcasts, and other handy tools.</p></div>
+        <div class="feature"><div class="icon">🛡️</div><h3>Moderation</h3><p>Auto-moderation for spam, links, ads, mentions, caps and repeated messages. Configurable punishments: warn, mute, kick, ban, or role assignment.</p></div>
+        <div class="feature"><div class="icon">📋</div><h3>Logging</h3><p>Full server logging — voice joins, role changes, message deletions, edits, and more. Every event in one channel.</p></div>
+        <div class="feature"><div class="icon">🎫</div><h3>Ticket System</h3><p>Custom ticket forms with questions, roles, and target categories. Users click a button, fill out the form, and a private channel is created for them.</p></div>
+        <div class="feature"><div class="icon">📊</div><h3>Server Status</h3><p>Live status channels with member counts, online users, and custom labels. Always up to date.</p></div>
+        <div class="feature"><div class="icon">✨</div><h3>Embed Builder</h3><p>Beautiful, formatted messages with titles, subtitles, sections, and custom text — built the way you want them.</p></div>
+        <div class="feature"><div class="icon">👋</div><h3>Welcome &amp; Farewell</h3><p>Welcome messages in channels and DMs, with member count, avatars, invite info, and pictures.</p></div>
+        <div class="feature"><div class="icon">📈</div><h3>Leveling</h3><p>Message and voice activity levels. Reward roles for activity — both on the whole server and in specific channels.</p></div>
+        <div class="feature"><div class="icon">🎭</div><h3>Role Buttons</h3><p>Self-assignable roles via emoji buttons. Click — get the role, click again — lose it.</p></div>
+        <div class="feature"><div class="icon">🔊</div><h3>Voice &amp; Soundboard</h3><p>Join voice channels, play sounds, and manage audio experiences with an easy-to-use soundboard.</p></div>
+        <div class="feature"><div class="icon">📨</div><h3>Broadcasts</h3><p>Send custom messages to multiple channels at once. Perfect for announcements.</p></div>
+        <div class="feature"><div class="icon">🔗</div><h3>Invite Tracking</h3><p>Know who invited each new member, how many invites each user has, and how many are retained.</p></div>
+        <div class="feature"><div class="icon">⚙️</div><h3>Access Control</h3><p>Detailed permissions for who can use the bot and which commands. No random users messing with settings.</p></div>
       </div>
     </section>
 
@@ -195,11 +256,11 @@
     <section class="reveal">
       <h2 class="section-title">Contact</h2>
       <div class="contacts">
-        <div class="contact-row"><span class="label">Support Server</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">discord.gg/scity</a></div>
+        <div class="contact-row"><span class="label">Support Server</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">Join the support server</a></div>
         <div class="contact-row"><span class="label">Developer Channel</span><a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener">#bot-support</a></div>
-        <div class="contact-row"><span class="label">Developer DM</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Direct Message</a></div>
+        <div class="contact-row"><span class="label">Developer DM</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Message the developer</a></div>
         <div class="contact-row"><span class="label">Email</span><a href="mailto:s1ivker090@gmail.com">s1ivker090@gmail.com</a></div>
-        <div class="contact-row"><span class="label">Backup Server</span><a href="https://discord.gg/6jNGZJ4Nk6" target="_blank" rel="noopener">Join backup server</a></div>
+        <div class="contact-row"><span class="label">Backup Server</span><a href="https://discord.gg/6jNGZJ4Nk6" target="_blank" rel="noopener">Join the backup server</a></div>
       </div>
     </section>
 
@@ -212,28 +273,37 @@
     <div class="hero reveal">
       <video class="avatar" src="avatar.mp4" autoplay loop muted playsinline></video>
       <h1>SCity</h1>
-      <p class="tagline">Комфортный Discord-бот с модерацией, статусом сервера, тикетами и кучей полезных мелочей.</p>
+      <p class="tagline">Комфортный Discord-бот с модерацией, тикетами, логами, уровнями и кучей полезных функций для сообществ любого размера.</p>
       <div class="cta">
         <a href="https://discord.com/oauth2/authorize?client_id=1298592282634752040&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener" class="btn btn-primary">Добавить в Discord</a>
-        <a href="https://discord.gg/scity" target="_blank" rel="noopener" class="btn btn-ghost">Сервер поддержки</a>
+        <a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener" class="btn btn-ghost">Сервер поддержки</a>
       </div>
     </div>
 
     <section class="about reveal">
       <h2 class="section-title">О <span>SCity</span></h2>
       <div class="card">
-        <p>SCity — это Discord-бот, созданный для того, чтобы сделать серверы комфортными и организованными. Мы берём на себя рутину — модерацию, логи, приветствия, кнопки ролей, тикеты и статус сервера — чтобы вы могли заниматься сообществом.</p>
-        <p>Наша команда ценит стабильность, чистый дизайн и честную работу. Никакой навязчивой рекламы, продажи данных и сомнительных механик. Просто бот, который хорошо делает своё дело.</p>
+        <p>SCity — это Discord-бот, созданный для того, чтобы сделать серверы комфортными, организованными и приятными для общения. Мы берём на себя рутину — модерацию, логи, приветствия и прощания, кнопки ролей, тикеты, уровни и статус сервера — чтобы вы могли заниматься сообществом.</p>
+        <p>Наша команда ценит стабильность, чистый дизайн и честную работу. Никакой навязчивой рекламы, продажи данных и сомнительных механик. Просто бот, который хорошо делает своё дело и уважает как владельцев серверов, так и участников.</p>
+        <p>Бот рассчитан на любые серверы — игровые кланы, тематические сообщества, уютные группки друзей. Каждая функция полностью настраивается, чтобы каждый сервер мог быть настроен так, как хочет его владелец.</p>
       </div>
     </section>
 
     <section class="reveal">
       <h2 class="section-title">Что <span>мы предлагаем</span></h2>
       <div class="features">
-        <div class="feature"><h3>Модерация</h3><p>Логи, приветствия и прощания, кнопки ролей — всё настраивается под каждый сервер.</p></div>
-        <div class="feature"><h3>Статус сервера</h3><p>Живые статус-каналы с количеством участников, онлайном и другим.</p></div>
-        <div class="feature"><h3>Голос и саундборд</h3><p>Заход в голосовые каналы, воспроизведение звуков и управление аудио.</p></div>
-        <div class="feature"><h3>Утилиты</h3><p>Панель помощи, приветственные ЛС, рассылки по каналам и другие инструменты.</p></div>
+        <div class="feature"><div class="icon">🛡️</div><h3>Модерация</h3><p>Авто-модерация спама, ссылок, рекламы, упоминаний, капса и повторяющихся сообщений. Настраиваемые наказания: предупреждение, мут, кик, бан или выдача роли.</p></div>
+        <div class="feature"><div class="icon">📋</div><h3>Логирование</h3><p>Полные логи сервера — подключения к войсу, смена ролей, удаление и редактирование сообщений и многое другое. Все события в одном канале.</p></div>
+        <div class="feature"><div class="icon">🎫</div><h3>Система тикетов</h3><p>Настраиваемые формы тикетов с вопросами, ролями и целевой категорией. Пользователь нажимает кнопку, заполняет форму — создаётся приватный канал.</p></div>
+        <div class="feature"><div class="icon">📊</div><h3>Статус сервера</h3><p>Живые статус-каналы с количеством участников, онлайном и кастомными названиями. Всегда актуально.</p></div>
+        <div class="feature"><div class="icon">✨</div><h3>Конструктор эмбедов</h3><p>Красивые оформленные сообщения с заголовками, подзаголовками, разделами и своим текстом — такими, как вы захотите.</p></div>
+        <div class="feature"><div class="icon">👋</div><h3>Приветствие и прощание</h3><p>Приветственные сообщения в каналах и ЛС, с количеством участников, аватарами, информацией об инвайте и картинками.</p></div>
+        <div class="feature"><div class="icon">📈</div><h3>Уровни</h3><p>Уровни за сообщения и активность в войсе. Награды ролями за активность — как на всём сервере, так и в отдельных каналах.</p></div>
+        <div class="feature"><div class="icon">🎭</div><h3>Кнопки ролей</h3><p>Самостоятельная выдача ролей через кнопки с эмодзи. Нажал — получил роль, нажал ещё раз — снял.</p></div>
+        <div class="feature"><div class="icon">🔊</div><h3>Голос и саундборд</h3><p>Заход в голосовые каналы, воспроизведение звуков и управление аудио через удобный саундборд.</p></div>
+        <div class="feature"><div class="icon">📨</div><h3>Рассылки</h3><p>Отправка кастомных сообщений сразу в несколько каналов. Идеально для анонсов.</p></div>
+        <div class="feature"><div class="icon">🔗</div><h3>Трекинг инвайтов</h3><p>Кто пригласил каждого нового участника, сколько у кого инвайтов и сколько из них удержано.</p></div>
+        <div class="feature"><div class="icon">⚙️</div><h3>Контроль доступа</h3><p>Детальные права на то, кто может пользоваться ботом и какие команды доступны. Никаких случайных пользователей в настройках.</p></div>
       </div>
     </section>
 
@@ -265,9 +335,9 @@
     <section class="reveal">
       <h2 class="section-title">Контакты</h2>
       <div class="contacts">
-        <div class="contact-row"><span class="label">Сервер поддержки</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">discord.gg/scity</a></div>
+        <div class="contact-row"><span class="label">Сервер поддержки</span><a href="https://discord.gg/scity" target="_blank" rel="noopener">Перейти на сервер поддержки</a></div>
         <div class="contact-row"><span class="label">Канал разработчиков</span><a href="https://discord.com/channels/1190795557258674256/1570557125091139664" target="_blank" rel="noopener">#bot-support</a></div>
-        <div class="contact-row"><span class="label">ЛС разработчика</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Личные сообщения</a></div>
+        <div class="contact-row"><span class="label">ЛС разработчика</span><a href="https://discord.com/users/1075843058052104212" target="_blank" rel="noopener">Написать разработчику</a></div>
         <div class="contact-row"><span class="label">Email</span><a href="mailto:s1ivker090@gmail.com">s1ivker090@gmail.com</a></div>
         <div class="contact-row"><span class="label">Резервный сервер</span><a href="https://discord.gg/6jNGZJ4Nk6" target="_blank" rel="noopener">Перейти на резервный сервер</a></div>
       </div>
@@ -294,37 +364,30 @@ function setLang(l) {
   if (saved === 'ru' || saved === 'en') setLang(saved);
 })();
 
-// mouse-follow gradient
+// Реакция блобов на мышь
+const blobs = document.querySelectorAll('.blob');
+let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 40;
-  const y = (e.clientY / window.innerHeight - 0.5) * 40;
-  const before = document.body;
-  before.style.setProperty('--mx', x + 'px');
-  before.style.setProperty('--my', y + 'px');
-  const bg = document.querySelector('body::before');
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  blobs.forEach((blob, i) => {
+    const speed = (i + 1) * 18;
+    blob.style.transform = `translate(${mouseX * speed}px, ${mouseY * speed}px)`;
+  });
 });
-// apply via CSS variable on pseudo is not possible directly, so animate a wrapper
-const style = document.createElement('style');
-style.textContent = `
-  body::before {
-    transform: translate(var(--mx, 0), var(--my, 0));
-  }
-`;
-document.head.appendChild(style);
 
-// scroll reveal
+// Плавное появление при скролле
 function checkReveal(el) {
   const rect = el.getBoundingClientRect();
   const visible = rect.top < window.innerHeight - 80;
   if (visible) el.classList.add('visible');
 }
-function initReveal() {
-  document.querySelectorAll('.reveal').forEach(el => checkReveal(el));
-}
 window.addEventListener('scroll', () => {
-  document.querySelectorAll('.reveal').forEach(el => checkReveal(el));
+  document.querySelectorAll('.reveal').forEach(checkReveal);
 });
-window.addEventListener('load', initReveal);
+window.addEventListener('load', () => {
+  document.querySelectorAll('.reveal').forEach(checkReveal);
+});
 </script>
 </body>
 </html>
