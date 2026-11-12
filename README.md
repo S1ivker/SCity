@@ -54,12 +54,12 @@
 
 ## Ссылки
 
-- 🌐 **Сайт:** [s1ivker.github.io/scity](https://s1ivker.github.io/scity/)
-- 💬 **Сервер поддержки:** [discord.gg/scity](https://discord.gg/scity)
-- 🛠 **Канал разработчиков:** [#bot-support](https://discord.com/channels/1190795557258674256/1570557125091139664)
-- 📨 **Резервный сервер:** [discord.gg/6jNGZJ4Nk6](https://discord.gg/6jNGZJ4Nk6)
-- ✉️ **Email:** [s1ivker090@gmail.com](mailto:s1ivker090@gmail.com)
-- 👤 **Разработчик:** [discord.com/users/1075843058052104212](https://discord.com/users/1075843058052104212)
+| 🌐 **Сайт** | [s1ivker.github.io/scity](https://s1ivker.github.io/scity/) |
+| 💬 **Сервер поддержки** | [Присоединиться](https://discord.gg/scity) |
+| 🛠 **Канал разработчиков** | [#bot-support](https://discord.com/channels/1190795557258674256/1570557125091139664) |
+| 📨 **Резервный сервер** | [Присоединиться](https://discord.gg/6jNGZJ4Nk6) |
+| ✉️ **Email** | [s1ivker090@gmail.com](mailto:s1ivker090@gmail.com) |
+| 👤 **Разработчик** | [Профиль](https://discord.com/users/1075843058052104212) |
 
 ---
 
